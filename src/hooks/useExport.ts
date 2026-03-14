@@ -7,7 +7,7 @@ import { BoldTemplate } from '@renderer/components/templates/BoldTemplate'
 import { ElegantTemplate } from '@renderer/components/templates/ElegantTemplate'
 import { GradientTemplate } from '@renderer/components/templates/GradientTemplate'
 import { MagazineTemplate } from '@renderer/components/templates/MagazineTemplate'
-import type { TemplateId, CardProps } from '@renderer/types'
+import type { TemplateId, CardProps, CardData } from '@renderer/types'
 import React from 'react'
 
 const TEMPLATE_MAP: Record<TemplateId, React.ComponentType<CardProps>> = {
@@ -28,17 +28,16 @@ declare global {
 }
 
 /** html2canvas로 1080×1080 PNG dataURL 생성 */
-async function renderToPNG(card: ReturnType<typeof useCardStore>['card']): Promise<string> {
+async function renderToPNG(card: CardData): Promise<string> {
   const container = document.createElement('div')
   // visibility:hidden + absolute 위치 — html2canvas가 캡처할 수 있는 위치
   container.style.cssText = `
-    position: absolute;
+    position: fixed;
     top: 0;
-    left: 0;
+    left: -9999px;
     width: 1080px;
     height: 1080px;
     overflow: hidden;
-    visibility: hidden;
     pointer-events: none;
     z-index: -9999;
   `

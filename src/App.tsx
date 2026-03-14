@@ -9,18 +9,18 @@ export function App() {
   const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'))
 
   return (
-    <div className={`h-screen flex flex-col overflow-hidden ${theme === 'dark' ? 'dark' : ''}`}>
+    <div className={`h-[100dvh] flex flex-col ${theme === 'dark' ? 'dark' : ''}`}>
       <div className="flex flex-col h-full bg-panel-light dark:bg-panel-dark">
         <TopBar theme={theme} onToggleTheme={toggleTheme} />
 
-        <main className="flex flex-1 overflow-hidden pt-12">
+        <main className="flex flex-row flex-1 min-h-0 pt-12">
           {/* Left panel: content & controls */}
-          <aside className="w-[380px] flex-shrink-0 h-full border-r border-gray-100 dark:border-gray-700/50 bg-panel-light dark:bg-panel-dark">
+          <aside className="w-full md:w-[380px] md:flex-shrink-0 h-full border-r border-gray-100 dark:border-gray-700/50 bg-panel-light dark:bg-panel-dark">
             <LeftPanel />
           </aside>
 
-          {/* Right panel: iPhone preview */}
-          <section className="flex-1 h-full bg-gray-50 dark:bg-gray-900 flex items-center justify-center overflow-hidden">
+          {/* Right panel: iPhone preview — desktop only */}
+          <section className="hidden md:flex flex-1 h-full bg-gray-50 dark:bg-gray-900 items-center justify-center overflow-hidden">
             <RightPanel />
           </section>
         </main>
