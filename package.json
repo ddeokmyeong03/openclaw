@@ -1,0 +1,58 @@
+{
+  "name": "card-news-maker",
+  "version": "1.0.0",
+  "description": "Instagram 카드뉴스 생성 데스크톱 앱",
+  "main": "out/main/index.mjs",
+  "scripts": {
+    "dev": "ELECTRON_RUN_AS_NODE= electron-vite dev",
+    "dev:linux": "Xvfb :99 -screen 0 1280x800x24 & DISPLAY=:99 ELECTRON_RUN_AS_NODE= electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:linux": "npm run build && electron-builder --linux"
+  },
+  "dependencies": {
+    "framer-motion": "^11.3.2",
+    "html2canvas": "^1.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@electron-toolkit/preload": "^3.0.0",
+    "@electron-toolkit/utils": "^3.0.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "electron": "31.7.7",
+    "electron-builder": "^24.13.3",
+    "electron-vite": "^2.3.0",
+    "postcss": "^8.4.39",
+    "tailwindcss": "^3.4.6",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.4"
+  },
+  "build": {
+    "appId": "com.openclaw.cardnews",
+    "productName": "카드뉴스 메이커",
+    "directories": {
+      "buildResources": "resources",
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*"
+    ],
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.graphics-design"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}
