@@ -17,7 +17,8 @@
 | **색상 커스텀** | 배경색 · 강조색 · 텍스트 색 |
 | **폰트 선택** | Pretendard / Noto Sans KR / Noto Serif KR / Black Han Sans / Gowun Dodum |
 | **PNG 내보내기** | 1080×1080 고해상도 PNG 자동 다운로드 |
-| **다크 모드** | 시스템 테마 자동 연동 |
+| **다크 모드** | TopBar 버튼으로 라이트/다크 전환 |
+| **모바일 지원** | 햄버거 메뉴로 편집 패널 열기/닫기, 미리보기 상시 표시 |
 
 ---
 
@@ -42,6 +43,13 @@
 ```
 https://ddeokmyeong03.github.io/openclaw/
 ```
+
+**모바일 사용법**
+1. 위 URL 접속
+2. 기본 화면에서 아이폰 목업 미리보기 확인
+3. 좌측 상단 햄버거(☰) 버튼 → 편집 패널 열기
+4. 내용·템플릿·색상·폰트 수정 후 패널 닫기
+5. "PNG로 내보내기" 버튼 → 1080×1080 PNG 다운로드
 
 ### Electron 데스크톱 설치
 
@@ -110,7 +118,7 @@ Electron 31          — 데스크톱 앱 패키징
 electron-vite 2      — 빌드 오케스트레이터
 React 18             — UI 프레임워크
 TypeScript           — 타입 안전성
-Tailwind CSS         — 스타일링 (다크 모드 지원)
+Tailwind CSS         — 스타일링 (다크 모드, 반응형)
 Zustand              — 전역 상태 관리
 Framer Motion        — 템플릿 전환 애니메이션
 html2canvas          — 오프스크린 1080×1080 → PNG 캡처
@@ -126,12 +134,13 @@ openclaw/
 │   ├── main/index.ts          # 메인 프로세스 (IPC, 파일 저장)
 │   └── preload/index.ts       # contextBridge API 노출
 ├── src/
-│   ├── App.tsx                # 루트 레이아웃
+│   ├── App.tsx                # 루트 레이아웃 (모바일 햄버거 드로어 포함)
 │   ├── types/index.ts         # CardData, TemplateId 타입
 │   ├── store/useCardStore.ts  # Zustand 전역 상태
 │   ├── hooks/useExport.ts     # PNG 내보내기 훅
 │   └── components/
-│       ├── LeftPanel/         # 편집 패널
+│       ├── TopBar.tsx         # 상단 바 (햄버거 버튼, 다크모드 토글)
+│       ├── LeftPanel/         # 편집 패널 (모바일: 드로어)
 │       ├── RightPanel/        # 아이폰 목업 + 미리보기
 │       └── templates/         # 5가지 카드 템플릿
 ├── .github/workflows/
@@ -144,10 +153,10 @@ openclaw/
 ## 내보내기 동작 방식
 
 ```
-[내보내기 버튼 클릭]
+[PNG로 내보내기 클릭]
         │
         ▼
-  1080×1080 오프스크린 렌더링 (visibility:hidden)
+  1080×1080 오프스크린 렌더링 (left: -9999px)
         │
         ▼
   document.fonts.ready 대기 → html2canvas 캡처
@@ -155,6 +164,17 @@ openclaw/
         ├─ Electron → 네이티브 저장 다이얼로그 → fs.writeFile
         └─ 브라우저 → <a download> 자동 다운로드
 ```
+
+---
+
+## 모바일 레이아웃
+
+| 상태 | 화면 |
+|------|------|
+| 기본 | 아이폰 목업 미리보기 전체 화면 |
+| 햄버거 버튼 탭 | 편집 패널이 왼쪽에서 슬라이드인 |
+| 백드롭 터치 | 편집 패널 자동 닫힘 |
+| 데스크톱(md+) | 편집 패널 + 미리보기 양쪽 동시 표시 |
 
 ---
 
