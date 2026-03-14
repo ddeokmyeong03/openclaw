@@ -10,7 +10,10 @@
     "preview": "electron-vite preview",
     "dist:mac": "npm run build && electron-builder --mac",
     "dist:win": "npm run build && electron-builder --win",
-    "dist:linux": "npm run build && electron-builder --linux"
+    "dist:linux": "npm run build && electron-builder --linux",
+    "dev:web": "vite --config vite.web.config.ts",
+    "build:web": "vite build --config vite.web.config.ts",
+    "dist": "npm run build && electron-builder"
   },
   "dependencies": {
     "framer-motion": "^11.3.2",
