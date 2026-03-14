@@ -5,6 +5,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 @layer base {
   * {
     box-sizing: border-box;

@@ -20,6 +20,11 @@ export interface CardData {
   logoText?: string
 }
 
+export interface CardPage extends CardData {
+  id: string
+  pageType: 'cover' | 'body' | 'closing'
+}
+
 export interface CardProps {
   data: CardData
   isExporting?: boolean
@@ -31,4 +36,13 @@ export interface TemplateConfig {
   nameKo: string
   thumbnailBg: string
   description: string
+}
+
+export interface Project {
+  id: string
+  title: string
+  rawText: string
+  pages: CardPage[]
+  createdAt: string
+  updatedAt: string
 }

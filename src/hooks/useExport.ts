@@ -18,19 +18,9 @@ const TEMPLATE_MAP: Record<TemplateId, React.ComponentType<CardProps>> = {
   magazine: MagazineTemplate
 }
 
-declare global {
-  interface Window {
-    electronAPI?: {
-      showSaveDialog: () => Promise<string | undefined>
-      exportCard: (dataUrl: string, filePath: string) => Promise<{ success: boolean }>
-    }
-  }
-}
-
 /** html2canvas로 1080×1080 PNG dataURL 생성 */
 async function renderToPNG(card: CardData): Promise<string> {
   const container = document.createElement('div')
-  // visibility:hidden + absolute 위치 — html2canvas가 캡처할 수 있는 위치
   container.style.cssText = `
     position: fixed;
     top: 0;
@@ -69,26 +59,24 @@ async function renderToPNG(card: CardData): Promise<string> {
 
 export function useExport() {
   const [isExporting, setIsExporting] = useState(false)
-  const { card } = useCardStore()
+  const { currentPage } = useCardStore()
 
-  // true = 성공, false = 취소/실패
   const exportToPNG = async (): Promise<boolean> => {
     if (isExporting) return false
     setIsExporting(true)
 
     try {
-      const dataUrl = await renderToPNG(card)
+      const dataUrl = await renderToPNG(currentPage)
 
-      // ── Electron 환경 ──────────────────────────────────────
       if (window.electronAPI) {
         const filePath = await window.electronAPI.showSaveDialog()
-        if (!filePath) return false   // 사용자가 취소
+        if (!filePath) return false
 
         await window.electronAPI.exportCard(dataUrl, filePath)
         return true
       }
 
-      // ── 브라우저(포트포워딩) 환경 — 다운로드 링크 fallback ──
+      // 브라우저 fallback
       const link = document.createElement('a')
       link.href = dataUrl
       link.download = `카드뉴스_${Date.now()}.png`

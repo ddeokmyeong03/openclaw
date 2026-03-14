@@ -3,6 +3,7 @@ import { TemplateSelector } from './TemplateSelector'
 import { ColorPicker } from './ColorPicker'
 import { FontSelector } from './FontSelector'
 import { ExportButton } from './ExportButton'
+import { AISection } from './AISection'
 import { useCardStore } from '@renderer/store/useCardStore'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -17,12 +18,16 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 export function LeftPanel() {
-  const { resetCard } = useCardStore()
+  const { resetPages } = useCardStore()
 
   return (
     <div className="flex flex-col h-full">
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+        <Section title="AI 생성">
+          <AISection />
+        </Section>
+
         <Section title="내용 편집">
           <ContentEditor />
         </Section>
@@ -42,7 +47,7 @@ export function LeftPanel() {
         {/* Reset button */}
         <div>
           <button
-            onClick={resetCard}
+            onClick={resetPages}
             className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors underline underline-offset-2"
           >
             기본값으로 초기화

@@ -38,7 +38,7 @@ function ColorSwatch({ label, value, onChange }: ColorSwatchProps) {
 }
 
 export function ColorPicker() {
-  const { card, updateCard } = useCardStore()
+  const { currentPage, updateCurrentPage } = useCardStore()
 
   return (
     <div className="space-y-4">
@@ -51,7 +51,7 @@ export function ColorPicker() {
           {PALETTE_PRESETS.map((p) => (
             <button
               key={p.label}
-              onClick={() => updateCard({ backgroundColor: p.bg, accentColor: p.accent, textColor: p.text })}
+              onClick={() => updateCurrentPage({ backgroundColor: p.bg, accentColor: p.accent, textColor: p.text })}
               title={p.label}
               className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-700 shadow-md hover:scale-110 transition-transform overflow-hidden relative"
               style={{ background: `linear-gradient(135deg, ${p.bg} 50%, ${p.accent} 50%)` }}
@@ -64,18 +64,18 @@ export function ColorPicker() {
       <div className="space-y-3">
         <ColorSwatch
           label="배경 색상"
-          value={card.backgroundColor}
-          onChange={(v) => updateCard({ backgroundColor: v })}
+          value={currentPage.backgroundColor}
+          onChange={(v) => updateCurrentPage({ backgroundColor: v })}
         />
         <ColorSwatch
           label="강조 색상"
-          value={card.accentColor}
-          onChange={(v) => updateCard({ accentColor: v })}
+          value={currentPage.accentColor}
+          onChange={(v) => updateCurrentPage({ accentColor: v })}
         />
         <ColorSwatch
           label="텍스트 색상"
-          value={card.textColor}
-          onChange={(v) => updateCard({ textColor: v })}
+          value={currentPage.textColor}
+          onChange={(v) => updateCurrentPage({ textColor: v })}
         />
       </div>
     </div>

@@ -104,11 +104,42 @@ function InstagramActions() {
 }
 
 export function CardPreview() {
-  const { card } = useCardStore()
-  const ActiveTemplate = TEMPLATE_MAP[card.templateId]
+  const { currentPage, isGenerating } = useCardStore()
+  const ActiveTemplate = TEMPLATE_MAP[currentPage.templateId]
 
   return (
-    <div style={{ width: '100%', backgroundColor: '#FAFAFA' }}>
+    <div style={{ width: '100%', backgroundColor: '#FAFAFA', position: 'relative' }}>
+      {/* AI 생성 중 오버레이 */}
+      <AnimatePresence>
+        {isGenerating && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 10,
+              backgroundColor: 'rgba(0,0,0,0.6)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 12
+            }}
+          >
+            <div style={{
+              width: 40, height: 40, borderRadius: '50%',
+              border: '3px solid rgba(255,255,255,0.3)',
+              borderTopColor: 'white',
+              animation: 'spin 0.8s linear infinite'
+            }} />
+            <p style={{ color: 'white', fontSize: 13, fontWeight: 600, fontFamily: 'system-ui' }}>
+              템플릿 제작 중...
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {/* Status bar */}
       <div
         style={{
@@ -189,7 +220,7 @@ export function CardPreview() {
       >
         <AnimatePresence mode="wait">
           <motion.div
-            key={card.templateId}
+            key={`${currentPage.id}-${currentPage.templateId}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -201,7 +232,7 @@ export function CardPreview() {
               transformOrigin: 'top left'
             }}
           >
-            <ActiveTemplate data={card} />
+            <ActiveTemplate data={currentPage} />
           </motion.div>
         </AnimatePresence>
       </div>

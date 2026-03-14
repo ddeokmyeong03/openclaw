@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { IPhoneMockup } from './IPhoneMockup'
 import { CardPreview } from './CardPreview'
+import { PageNavigation } from '@renderer/components/PageNavigation'
 
 const PHONE_W = 393
 const PHONE_H = 852
@@ -14,7 +15,7 @@ export function RightPanel() {
       if (!containerRef.current) return
       const { width, height } = containerRef.current.getBoundingClientRect()
       const scaleW = (width - 32) / PHONE_W
-      const scaleH = (height - 56) / PHONE_H
+      const scaleH = (height - 100) / PHONE_H
       setScale(Math.min(scaleW, scaleH, 0.9))
     }
     update()
@@ -24,14 +25,14 @@ export function RightPanel() {
   }, [])
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center justify-center h-full gap-4">
+    <div ref={containerRef} className="flex flex-col items-center justify-center h-full gap-3">
       {/* Label */}
       <div className="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
         실시간 미리보기
       </div>
 
-      {/* iPhone mockup — dynamic scale to fit container */}
+      {/* iPhone mockup */}
       <div style={{ width: PHONE_W * scale, height: PHONE_H * scale, flexShrink: 0, position: 'relative' }}>
         <div style={{ transform: `scale(${scale})`, transformOrigin: 'top left', position: 'absolute', width: PHONE_W, height: PHONE_H }}>
           <IPhoneMockup>
@@ -39,6 +40,9 @@ export function RightPanel() {
           </IPhoneMockup>
         </div>
       </div>
+
+      {/* 페이지 네비게이션 */}
+      <PageNavigation />
 
       {/* Instagram size hint */}
       <p className="text-xs text-gray-400 dark:text-gray-500">

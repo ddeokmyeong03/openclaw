@@ -4,7 +4,7 @@ import { TEMPLATES } from '@renderer/components/templates'
 import type { TemplateId } from '@renderer/types'
 
 export function TemplateSelector() {
-  const { card, updateCard } = useCardStore()
+  const { currentPage, updateCurrentPage } = useCardStore()
 
   const COLOR_PRESETS: Record<TemplateId, { bg: string; accent: string; text: string }> = {
     minimal: { bg: '#FFFFFF', accent: '#3B82F6', text: '#1A1A1A' },
@@ -16,13 +16,13 @@ export function TemplateSelector() {
 
   const handleSelect = (id: TemplateId) => {
     const preset = COLOR_PRESETS[id]
-    updateCard({ templateId: id, ...preset })
+    updateCurrentPage({ templateId: id, backgroundColor: preset.bg, accentColor: preset.accent, textColor: preset.text })
   }
 
   return (
     <div className="grid grid-cols-5 gap-2">
       {TEMPLATES.map((t) => {
-        const isSelected = card.templateId === t.id
+        const isSelected = currentPage.templateId === t.id
         return (
           <motion.button
             key={t.id}
@@ -35,12 +35,10 @@ export function TemplateSelector() {
                 : 'border-transparent hover:border-gray-200 dark:hover:border-gray-600'
             }`}
           >
-            {/* Thumbnail */}
             <div
               className="w-full aspect-square rounded-lg overflow-hidden"
               style={{ background: t.thumbnailBg }}
             >
-              {/* Mini preview lines */}
               <div className="w-full h-full flex flex-col justify-center items-center gap-1 p-2">
                 <div className="w-3/4 h-1 bg-white/40 rounded" />
                 <div className="w-1/2 h-1 bg-white/30 rounded" />

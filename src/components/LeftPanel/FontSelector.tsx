@@ -10,7 +10,7 @@ const FONTS: { value: FontFamily; label: string; preview: string }[] = [
 ]
 
 export function FontSelector() {
-  const { card, updateCard } = useCardStore()
+  const { currentPage, updateCurrentPage } = useCardStore()
 
   return (
     <div className="space-y-4">
@@ -23,9 +23,9 @@ export function FontSelector() {
           {FONTS.map((f) => (
             <button
               key={f.value}
-              onClick={() => updateCard({ fontFamily: f.value })}
+              onClick={() => updateCurrentPage({ fontFamily: f.value })}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all text-left ${
-                card.fontFamily === f.value
+                currentPage.fontFamily === f.value
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/30'
                   : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
               }`}
@@ -51,9 +51,9 @@ export function FontSelector() {
           {(['sm', 'md', 'lg'] as const).map((size) => (
             <button
               key={size}
-              onClick={() => updateCard({ fontSize: size })}
+              onClick={() => updateCurrentPage({ fontSize: size })}
               className={`flex-1 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                card.fontSize === size
+                currentPage.fontSize === size
                   ? 'border-blue-500 bg-blue-500 text-white shadow-md'
                   : 'border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:border-blue-300'
               }`}
