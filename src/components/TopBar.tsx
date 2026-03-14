@@ -3,16 +3,29 @@ import { motion } from 'framer-motion'
 interface TopBarProps {
   theme: 'light' | 'dark'
   onToggleTheme: () => void
+  isEditOpen?: boolean
+  onToggleEdit?: () => void
 }
 
-export function TopBar({ theme, onToggleTheme }: TopBarProps) {
+export function TopBar({ theme, onToggleTheme, isEditOpen, onToggleEdit }: TopBarProps) {
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50 h-12 flex items-center justify-between px-5 border-b border-gray-100 dark:border-gray-700/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm"
       style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
     >
-      {/* macOS traffic light spacer */}
-      <div className="w-20" />
+      {/* Hamburger button — mobile only */}
+      <div className="w-20 flex items-center" style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}>
+        <motion.button
+          onClick={onToggleEdit}
+          whileTap={{ scale: 0.9 }}
+          className="md:hidden w-8 h-8 flex flex-col items-center justify-center gap-1.5"
+          aria-label="편집 패널 열기"
+        >
+          <span className={`block w-5 h-0.5 bg-gray-600 dark:bg-gray-300 transition-all duration-300 origin-center ${isEditOpen ? 'translate-y-2 rotate-45' : ''}`} />
+          <span className={`block w-5 h-0.5 bg-gray-600 dark:bg-gray-300 transition-all duration-300 ${isEditOpen ? 'opacity-0' : ''}`} />
+          <span className={`block w-5 h-0.5 bg-gray-600 dark:bg-gray-300 transition-all duration-300 origin-center ${isEditOpen ? '-translate-y-2 -rotate-45' : ''}`} />
+        </motion.button>
+      </div>
 
       {/* App name */}
       <div className="flex items-center gap-2">
