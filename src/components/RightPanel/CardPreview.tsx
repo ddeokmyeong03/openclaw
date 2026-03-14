@@ -197,7 +197,8 @@ export function CardPreview() {
             style={{
               width: CARD_NATIVE,
               height: CARD_NATIVE,
-              zoom: SCALE
+              transform: `scale(${SCALE})`,
+              transformOrigin: 'top left'
             }}
           >
             <ActiveTemplate data={card} />
