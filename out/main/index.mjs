@@ -35,21 +35,25 @@ ${rawText}
   "pages": [
     {
       "pageType": "cover",
-      "title": "제목",
-      "body": "부제목 또는 핵심 메시지",
+      "title": "메인 제목",
+      "subtitle": "소제목 또는 핵심 키워드",
+      "category": "카테고리",
+      "body": "표지 핵심 메시지",
       "hashtags": "#태그1 #태그2 #태그3",
-      "logoText": "브랜드/카테고리"
+      "logoText": "브랜드명"
     }
   ]
 }
 
 [규칙]
-- 첫 페이지: cover (표지) — title 20자 이내, body 40자 이내
-- 중간 페이지: body (본문) — 핵심 포인트 하나씩, title 15자 이내, body 80자 이내
+- 첫 페이지: cover (표지) — title 20자 이내, subtitle 20자 이내, body 40자 이내
+- 중간 페이지: body (본문) — 핵심 포인트 하나씩, title 15자 이내, subtitle 15자 이내, body 80자 이내
 - 마지막 페이지: closing (마무리) — 요약 또는 행동 유도
 - 총 페이지 수: 내용에 맞게 3~7페이지
+- category: 콘텐츠 분야 (예: 건강, 뷰티, 여행, 음식 등, 5자 이내)
 - hashtags: cover와 closing 페이지에만 포함 (나머지는 빈 문자열 "")
 - logoText: cover 페이지에만 포함 (10자 이내), 나머지는 빈 문자열 ""
+- subtitle이 없으면 빈 문자열 ""
 - 모든 내용은 자연스러운 한국어로 작성`;
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -140,6 +144,59 @@ app.whenReady().then(() => {
   ipcMain.handle("settings:set", async (_, settings) => {
     await writeJSON(getSettingsPath(), settings);
     return { success: true };
+  });
+  ipcMain.handle("ai:analyzePhoto", async (_, imageBase64, mimeType) => {
+    const settings = await readJSON(getSettingsPath(), {});
+    const apiKey = settings.claudeApiKey;
+    if (!apiKey) throw new Error("Claude API 키가 설정되지 않았습니다. 설정에서 API 키를 입력하세요.");
+    const prompt = `이 이미지의 색상과 분위기를 분석하여 인스타그램 카드뉴스 디자인 스타일을 추출해주세요.
+
+마크다운이나 추가 설명 없이 순수 JSON만 반환하세요:
+{
+  "backgroundColor": "#XXXXXX",
+  "accentColor": "#XXXXXX",
+  "textColor": "#XXXXXX",
+  "templateId": "minimal"
+}
+
+규칙:
+- backgroundColor: 이미지의 주요 배경색 또는 가장 넓은 면적의 색
+- accentColor: 이미지에서 가장 눈에 띄는 포인트 색상
+- textColor: accentColor와 backgroundColor 위에서 가독성 좋은 텍스트 색 (#FFFFFF 또는 어두운 계열)
+- templateId: 이미지 분위기에 맞는 템플릿 (minimal/bold/elegant/gradient/magazine 중 하나)
+  - 미니멀하고 깔끔한 이미지 → minimal
+  - 강렬하고 임팩트 있는 이미지 → bold
+  - 고급스럽고 세련된 이미지 → elegant
+  - 밝고 화려한 이미지 → gradient
+  - 정보성·뉴스 스타일 이미지 → magazine`;
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 512,
+        messages: [{
+          role: "user",
+          content: [
+            { type: "image", source: { type: "base64", media_type: mimeType, data: imageBase64 } },
+            { type: "text", text: prompt }
+          ]
+        }]
+      })
+    });
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(`Claude API 오류 (${response.status}): ${err}`);
+    }
+    const data = await response.json();
+    const text = data.content.find((c) => c.type === "text")?.text ?? "";
+    const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/) ?? text.match(/(\{[\s\S]*\})/);
+    const jsonText = jsonMatch ? jsonMatch[1] ?? jsonMatch[0] : text;
+    return JSON.parse(jsonText);
   });
   ipcMain.handle("ai:generatePages", async (_, rawText) => {
     const settings = await readJSON(getSettingsPath(), {});

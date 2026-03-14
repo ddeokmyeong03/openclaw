@@ -12,5 +12,7 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
   getSettings: () => electron.ipcRenderer.invoke("settings:get"),
   setSettings: (settings) => electron.ipcRenderer.invoke("settings:set", settings),
   // AI 카드 생성
-  generatePages: (rawText) => electron.ipcRenderer.invoke("ai:generatePages", rawText)
+  generatePages: (rawText) => electron.ipcRenderer.invoke("ai:generatePages", rawText),
+  // AI 사진 분석 (색상 추출)
+  analyzePhoto: (imageBase64, mimeType) => electron.ipcRenderer.invoke("ai:analyzePhoto", imageBase64, mimeType)
 });
