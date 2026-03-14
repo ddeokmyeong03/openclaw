@@ -3,6 +3,8 @@ import type { Project } from './index'
 type AIPage = {
   pageType: 'cover' | 'body' | 'closing'
   title: string
+  subtitle: string
+  category: string
   body: string
   hashtags: string
   logoText: string
@@ -19,6 +21,12 @@ declare global {
       getSettings: () => Promise<Record<string, string>>
       setSettings: (settings: Record<string, string>) => Promise<{ success: boolean }>
       generatePages: (rawText: string) => Promise<AIPage[]>
+      analyzePhoto: (imageBase64: string, mimeType: string) => Promise<{
+        backgroundColor: string
+        accentColor: string
+        textColor: string
+        templateId: string
+      }>
     }
   }
 }

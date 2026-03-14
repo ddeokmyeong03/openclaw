@@ -21,6 +21,23 @@ export function ElegantTemplate({ data }: CardProps) {
         overflow: 'hidden'
       }}
     >
+      {/* Background image */}
+      {data.imageUrl && (
+        <img
+          src={data.imageUrl}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: data.imageOpacity ?? 0.2,
+            pointerEvents: 'none',
+            zIndex: 0
+          }}
+        />
+      )}
+
       {/* Left vertical accent bar */}
       <div
         style={{
@@ -40,8 +57,8 @@ export function ElegantTemplate({ data }: CardProps) {
           justifyContent: 'space-between'
         }}
       >
-        {/* Top: brand */}
-        <div>
+        {/* Top: brand + category */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <span
             style={{
               fontSize: size.label,
@@ -53,6 +70,18 @@ export function ElegantTemplate({ data }: CardProps) {
           >
             {data.logoText || 'BRAND'}
           </span>
+          {data.category && (
+            <span style={{
+              fontSize: size.label * 0.9,
+              fontWeight: 500,
+              color: data.textColor,
+              opacity: 0.5,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase'
+            }}>
+              {data.category}
+            </span>
+          )}
         </div>
 
         {/* Center: title + divider + body */}
@@ -69,6 +98,19 @@ export function ElegantTemplate({ data }: CardProps) {
           >
             {data.title}
           </h1>
+
+          {/* Subtitle */}
+          {data.subtitle && (
+            <p style={{
+              fontSize: size.body * 0.85,
+              fontWeight: 500,
+              color: data.accentColor,
+              margin: '-36px 0 36px',
+              letterSpacing: '0.02em'
+            }}>
+              {data.subtitle}
+            </p>
+          )}
 
           {/* Thin line with dot */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 48 }}>

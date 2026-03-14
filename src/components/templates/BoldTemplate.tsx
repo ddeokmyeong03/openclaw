@@ -22,6 +22,23 @@ export function BoldTemplate({ data }: CardProps) {
         overflow: 'hidden'
       }}
     >
+      {/* Background image */}
+      {data.imageUrl && (
+        <img
+          src={data.imageUrl}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: data.imageOpacity ?? 0.2,
+            pointerEvents: 'none',
+            zIndex: 0
+          }}
+        />
+      )}
+
       {/* Top accent color block — takes ~55% height */}
       <div
         style={{
@@ -59,6 +76,21 @@ export function BoldTemplate({ data }: CardProps) {
           </span>
         </div>
 
+        {/* Category */}
+        {data.category && (
+          <div style={{ position: 'absolute', top: 52, right: 80 }}>
+            <span style={{
+              fontSize: size.label * 0.85,
+              fontWeight: 500,
+              color: 'rgba(255,255,255,0.75)',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase'
+            }}>
+              {data.category}
+            </span>
+          </div>
+        )}
+
         {/* Title */}
         <h1
           style={{
@@ -86,6 +118,17 @@ export function BoldTemplate({ data }: CardProps) {
           justifyContent: 'space-between'
         }}
       >
+        {data.subtitle && (
+          <p style={{
+            fontSize: size.body * 0.8,
+            fontWeight: 600,
+            color: data.accentColor,
+            margin: '0 0 16px',
+            letterSpacing: '0.03em'
+          }}>
+            {data.subtitle}
+          </p>
+        )}
         <p
           style={{
             fontSize: size.body,

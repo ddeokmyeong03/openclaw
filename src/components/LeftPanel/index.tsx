@@ -4,12 +4,14 @@ import { ColorPicker } from './ColorPicker'
 import { FontSelector } from './FontSelector'
 import { ExportButton } from './ExportButton'
 import { AISection } from './AISection'
+import { ImageEditor } from './ImageEditor'
+import { StylePresets } from './StylePresets'
 import { useCardStore } from '@renderer/store/useCardStore'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="border-b border-gray-100 dark:border-gray-700/50 pb-6">
-      <h3 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
+      <h3 className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">
         {title}
       </h3>
       {children}
@@ -23,7 +25,7 @@ export function LeftPanel() {
   return (
     <div className="flex flex-col h-full">
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+      <div className="flex-1 overflow-y-auto px-6 pt-3 pb-6 space-y-5">
         <Section title="AI 생성">
           <AISection />
         </Section>
@@ -42,6 +44,14 @@ export function LeftPanel() {
 
         <Section title="서체">
           <FontSelector />
+        </Section>
+
+        <Section title="이미지">
+          <ImageEditor />
+        </Section>
+
+        <Section title="스타일 프리셋">
+          <StylePresets />
         </Section>
 
         {/* Reset button */}

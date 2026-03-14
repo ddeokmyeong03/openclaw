@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { storageGetSettings, storageSetSettings } from '@renderer/lib/storage'
 
 interface SettingsModalProps {
   onClose: () => void
@@ -7,19 +8,21 @@ interface SettingsModalProps {
 
 export function SettingsModal({ onClose }: SettingsModalProps) {
   const [apiKey, setApiKey] = useState('')
+  const [unsplashKey, setUnsplashKey] = useState('')
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    window.electronAPI.getSettings().then((s) => {
+    storageGetSettings().then((s) => {
       setApiKey(s.claudeApiKey ?? '')
+      setUnsplashKey(s.unsplashAccessKey ?? '')
       setLoading(false)
     })
   }, [])
 
   const handleSave = async () => {
-    const current = await window.electronAPI.getSettings()
-    await window.electronAPI.setSettings({ ...current, claudeApiKey: apiKey.trim() })
+    const current = await storageGetSettings()
+    await storageSetSettings({ ...current, claudeApiKey: apiKey.trim(), unsplashAccessKey: unsplashKey.trim() })
     setSaved(true)
     setTimeout(() => {
       setSaved(false)
@@ -73,6 +76,28 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
                 placeholder="sk-ant-..."
+                className="w-full px-3 py-2.5 rounded-xl text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+              />
+            )}
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">
+              Unsplash Access Key
+            </label>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mb-2">
+              이미지 검색에 사용됩니다.{' '}
+              <span className="text-blue-500">unsplash.com/developers</span>
+              에서 발급받을 수 있습니다.
+            </p>
+            {loading ? (
+              <div className="h-10 bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
+            ) : (
+              <input
+                type="password"
+                value={unsplashKey}
+                onChange={(e) => setUnsplashKey(e.target.value)}
+                placeholder="Access Key..."
                 className="w-full px-3 py-2.5 rounded-xl text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
               />
             )}

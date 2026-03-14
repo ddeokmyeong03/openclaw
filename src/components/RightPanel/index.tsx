@@ -14,9 +14,9 @@ export function RightPanel() {
     const update = () => {
       if (!containerRef.current) return
       const { width, height } = containerRef.current.getBoundingClientRect()
-      const scaleW = (width - 32) / PHONE_W
-      const scaleH = (height - 100) / PHONE_H
-      setScale(Math.min(scaleW, scaleH, 0.9))
+      const scaleW = (width - 16) / PHONE_W
+      const scaleH = (height - 64) / PHONE_H
+      setScale(Math.min(scaleW, scaleH, 1.1))
     }
     update()
     const ro = new ResizeObserver(update)

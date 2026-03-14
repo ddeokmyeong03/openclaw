@@ -1,4 +1,5 @@
 import { useCardStore } from '@renderer/store/useCardStore'
+import { isElectron } from '@renderer/lib/storage'
 import type { CardPage } from '@renderer/types'
 
 export function useAIGenerate() {
@@ -7,6 +8,9 @@ export function useAIGenerate() {
   const generate = async (): Promise<{ success: boolean; error?: string }> => {
     if (!rawText.trim()) {
       return { success: false, error: '소재 텍스트를 먼저 입력해주세요.' }
+    }
+    if (!isElectron) {
+      return { success: false, error: 'AI 생성은 Electron 앱에서만 사용 가능합니다.' }
     }
 
     setIsGenerating(true)
@@ -28,6 +32,8 @@ export function useAIGenerate() {
         ...style,
         pageType: ap.pageType,
         title: ap.title,
+        subtitle: ap.subtitle || undefined,
+        category: ap.category || undefined,
         body: ap.body,
         hashtags: ap.hashtags,
         logoText: ap.logoText || undefined

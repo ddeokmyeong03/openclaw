@@ -34,6 +34,23 @@ export function GradientTemplate({ data }: CardProps) {
         overflow: 'hidden'
       }}
     >
+      {/* Background image */}
+      {data.imageUrl && (
+        <img
+          src={data.imageUrl}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: data.imageOpacity ?? 0.25,
+            pointerEvents: 'none',
+            zIndex: 0
+          }}
+        />
+      )}
+
       {/* Background decorative circles */}
       <div
         style={{
@@ -73,8 +90,8 @@ export function GradientTemplate({ data }: CardProps) {
           position: 'relative'
         }}
       >
-        {/* Brand label */}
-        <div style={{ marginBottom: 44 }}>
+        {/* Brand label + category */}
+        <div style={{ marginBottom: 44, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <span
             style={{
               fontSize: size.label,
@@ -86,6 +103,17 @@ export function GradientTemplate({ data }: CardProps) {
           >
             {data.logoText || 'BRAND'}
           </span>
+          {data.category && (
+            <span style={{
+              fontSize: size.label * 0.85,
+              fontWeight: 500,
+              color: 'rgba(255,255,255,0.6)',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase'
+            }}>
+              {data.category}
+            </span>
+          )}
         </div>
 
         {/* Title */}
@@ -102,6 +130,19 @@ export function GradientTemplate({ data }: CardProps) {
         >
           {data.title}
         </h1>
+
+        {/* Subtitle */}
+        {data.subtitle && (
+          <p style={{
+            fontSize: size.body * 0.85,
+            fontWeight: 500,
+            color: 'rgba(255,255,255,0.85)',
+            margin: '-24px 0 28px',
+            letterSpacing: '0.02em'
+          }}>
+            {data.subtitle}
+          </p>
+        )}
 
         {/* Separator */}
         <div

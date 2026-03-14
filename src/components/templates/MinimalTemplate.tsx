@@ -26,6 +26,22 @@ export function MinimalTemplate({ data }: CardProps) {
         position: 'relative'
       }}
     >
+      {/* Background image */}
+      {data.imageUrl && (
+        <img
+          src={data.imageUrl}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: data.imageOpacity ?? 0.25,
+            pointerEvents: 'none'
+          }}
+        />
+      )}
+
       {/* Top decoration */}
       <div
         style={{
@@ -61,13 +77,29 @@ export function MinimalTemplate({ data }: CardProps) {
 
       {/* Center content */}
       <div style={{ width: '100%', textAlign: 'center' }}>
+        {/* Category */}
+        {data.category && (
+          <div style={{ marginBottom: 24 }}>
+            <span style={{
+              fontSize: size.hashtag,
+              fontWeight: 600,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              color: data.accentColor,
+              opacity: 0.85
+            }}>
+              {data.category}
+            </span>
+          </div>
+        )}
+
         {/* Accent line */}
         <div
           style={{
             width: 60,
             height: 4,
             backgroundColor: data.accentColor,
-            margin: '0 auto 48px'
+            margin: `0 auto ${data.category ? '32px' : '48px'}`
           }}
         />
 
@@ -78,12 +110,25 @@ export function MinimalTemplate({ data }: CardProps) {
             fontWeight: 700,
             lineHeight: 1.2,
             letterSpacing: '-0.02em',
-            margin: '0 0 48px',
+            margin: '0 0 28px',
             color: data.textColor
           }}
         >
           {data.title}
         </h1>
+
+        {/* Subtitle */}
+        {data.subtitle && (
+          <p style={{
+            fontSize: size.body * 0.85,
+            fontWeight: 500,
+            color: data.accentColor,
+            margin: '0 0 28px',
+            letterSpacing: '0.02em'
+          }}>
+            {data.subtitle}
+          </p>
+        )}
 
         {/* Divider */}
         <div
@@ -92,7 +137,7 @@ export function MinimalTemplate({ data }: CardProps) {
             height: 1,
             backgroundColor: data.textColor,
             opacity: 0.15,
-            margin: '0 auto 48px'
+            margin: '0 auto 36px'
           }}
         />
 

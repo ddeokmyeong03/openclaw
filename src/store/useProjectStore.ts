@@ -1,5 +1,10 @@
 import { create } from 'zustand'
 import type { Project } from '@renderer/types'
+import {
+  storageGetProjects,
+  storageSaveProject,
+  storageDeleteProject
+} from '@renderer/lib/storage'
 
 interface ProjectStore {
   projects: Project[]
@@ -15,12 +20,12 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
 
   loadProjects: async () => {
     set({ isLoading: true })
-    const projects = await window.electronAPI.getProjects()
+    const projects = await storageGetProjects()
     set({ projects, isLoading: false })
   },
 
   saveProject: async (project) => {
-    await window.electronAPI.saveProject(project)
+    await storageSaveProject(project)
     const { projects } = get()
     const idx = projects.findIndex((p) => p.id === project.id)
     if (idx >= 0) {
@@ -33,7 +38,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   },
 
   deleteProject: async (id) => {
-    await window.electronAPI.deleteProject(id)
+    await storageDeleteProject(id)
     set({ projects: get().projects.filter((p) => p.id !== id) })
   }
 }))

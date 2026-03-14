@@ -20,9 +20,27 @@ export function MagazineTemplate({ data }: CardProps) {
         fontFamily: `'${data.fontFamily}', sans-serif`,
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden'
+        overflow: 'hidden',
+      position: 'relative'
       }}
     >
+      {/* Background image */}
+      {data.imageUrl && (
+        <img
+          src={data.imageUrl}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: data.imageOpacity ?? 0.15,
+            pointerEvents: 'none',
+            zIndex: 0
+          }}
+        />
+      )}
+
       {/* Header band */}
       <div
         style={{
@@ -126,11 +144,24 @@ export function MagazineTemplate({ data }: CardProps) {
               textTransform: 'uppercase',
               padding: '10px 24px',
               borderRadius: 4,
-              marginBottom: 32
+              marginBottom: 28
             }}
           >
-            STORY
+            {data.category || 'STORY'}
           </div>
+
+          {/* Subtitle */}
+          {data.subtitle && (
+            <p style={{
+              fontSize: size.body * 0.8,
+              fontWeight: 600,
+              color: data.accentColor,
+              margin: '0 0 20px',
+              letterSpacing: '0.02em'
+            }}>
+              {data.subtitle}
+            </p>
+          )}
 
           <p
             style={{

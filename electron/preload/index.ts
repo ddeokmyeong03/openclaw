@@ -26,8 +26,18 @@ contextBridge.exposeInMainWorld('electronAPI', {
   generatePages: (rawText: string): Promise<{
     pageType: 'cover' | 'body' | 'closing'
     title: string
+    subtitle: string
+    category: string
     body: string
     hashtags: string
     logoText: string
-  }[]> => ipcRenderer.invoke('ai:generatePages', rawText)
+  }[]> => ipcRenderer.invoke('ai:generatePages', rawText),
+
+  // AI 사진 분석 (색상 추출)
+  analyzePhoto: (imageBase64: string, mimeType: string): Promise<{
+    backgroundColor: string
+    accentColor: string
+    textColor: string
+    templateId: string
+  }> => ipcRenderer.invoke('ai:analyzePhoto', imageBase64, mimeType)
 })

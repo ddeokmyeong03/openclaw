@@ -18,6 +18,10 @@ export interface CardData {
   fontFamily: FontFamily
   fontSize: 'sm' | 'md' | 'lg'
   logoText?: string
+  subtitle?: string
+  category?: string
+  imageUrl?: string
+  imageOpacity?: number
 }
 
 export interface CardPage extends CardData {
